@@ -42,8 +42,13 @@ class ClientesController extends Controller
            if(empty($existsMasc)){
                $dataMasc = ['nombre_mascota' => $n_mascota, 'especie' => $especie, 'genero' => $generoMasc, 'id_cliente' => $id_Cliente];
                Mascotas::insert($dataMasc);
+               $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente)->pluck('id_mascota');
+               $ID_Masc = $queryExtractID->first();
+
                DB::table('clientes')->where('id_Cliente','=', $id_Cliente)->update(['longitud' => $long, 'latitud' => $lat]);
            }else{
+                $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente)->pluck('id_mascota');
+                $ID_Masc = $queryExtractID->first();
                 DB::table('clientes')->where('id_Cliente','=', $id_Cliente)->update(['longitud' => $long, 'latitud' => $lat]);
            }
            $flag = 0;
@@ -55,8 +60,7 @@ class ClientesController extends Controller
     }
 
     if($flag == 1){
-
-        
+      
         $clientID2= DB::table('clientes')->select('id_Cliente')->where('cedula','LIKE', $logClientCI)->pluck('id_Cliente');
         $id_Cliente2 = $clientID2->first();
 
@@ -66,8 +70,13 @@ class ClientesController extends Controller
 
             $dataMasc2 = ['nombre_mascota' => $n_mascota, 'especie' => $especie, 'genero' => $generoMasc, 'id_cliente' => $id_Cliente2];
             Mascotas::insert($dataMasc2);
+
+            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente)->pluck('id_mascota');
+            $ID_Masc = $queryExtractID->first();
             DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
         }else{
+            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente)->pluck('id_mascota');
+            $ID_Masc = $queryExtractID->first();
             DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
         }
     }
@@ -75,7 +84,8 @@ class ClientesController extends Controller
         return json_encode(array(
             'status' => 200,
             'response'  => $msg,
-            'Info' => $comprob
+            'Info' => $comprob,
+            'ID Mascota' => $ID_Masc
         ));
         // return json_encode(array(
         //     'Response' => $existsClient));
