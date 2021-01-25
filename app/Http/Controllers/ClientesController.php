@@ -71,11 +71,11 @@ class ClientesController extends Controller
             $dataMasc2 = ['nombre_mascota' => $n_mascota, 'especie' => $especie, 'genero' => $generoMasc, 'id_cliente' => $id_Cliente2];
             Mascotas::insert($dataMasc2);
 
-            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente)->pluck('id_mascota');
+            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->pluck('id_mascota');
             $ID_Masc = $queryExtractID->first();
             DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
         }else{
-            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente)->pluck('id_mascota');
+            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->pluck('id_mascota');
             $ID_Masc = $queryExtractID->first();
             DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
         }
