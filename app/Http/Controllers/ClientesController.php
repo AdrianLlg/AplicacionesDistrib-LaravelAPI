@@ -57,37 +57,38 @@ class ClientesController extends Controller
     }else{
         $comprob = 'Verificar la informacion ingresada';
         $msg = 'Algun campo se encuentra vacio';
+        $ID_Masc = "";
     }
+        if($nomb_ape && $lat && $long && $n_mascota && $especie && $generoMasc && $CI != null){
+            if($flag == 1){
+            
+                $comprob = 'Informacion procesada correctamente';
+                $msg = 'Informacion recibida correctamente';
 
-if($nomb_ape && $lat && $long && $n_mascota && $especie && $generoMasc && $CI != null){
-    if($flag == 1){
-      
-        $comprob = 'Informacion procesada correctamente';
-        $msg = 'Informacion recibida correctamente';
-        
-        $clientID2= DB::table('clientes')->select('id_Cliente')->where('cedula','LIKE', $logClientCI)->pluck('id_Cliente');
-        $id_Cliente2 = $clientID2->first();
+                $clientID2= DB::table('clientes')->select('id_Cliente')->where('cedula','LIKE', $logClientCI)->pluck('id_Cliente');
+                $id_Cliente2 = $clientID2->first();
 
-        $verifyMasc = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->first();
+                $verifyMasc = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->first();
 
-        if(empty($verifyMasc)){
+                if(empty($verifyMasc)){
 
-            $dataMasc2 = ['nombre_mascota' => $n_mascota, 'especie' => $especie, 'genero' => $generoMasc, 'id_cliente' => $id_Cliente2];
-            Mascotas::insert($dataMasc2);
+                    $dataMasc2 = ['nombre_mascota' => $n_mascota, 'especie' => $especie, 'genero' => $generoMasc, 'id_cliente' => $id_Cliente2];
+                    Mascotas::insert($dataMasc2);
 
-            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->pluck('id_mascota');
-            $ID_Masc = $queryExtractID->first();
-            DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
+                    $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->pluck('id_mascota');
+                    $ID_Masc = $queryExtractID->first();
+                    DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
+                }else{
+                    $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->pluck('id_mascota');
+                    $ID_Masc = $queryExtractID->first();
+                    DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
+                }
+            }
         }else{
-            $queryExtractID = DB::table('mascotas')->where('nombre_mascota','LIKE', $n_mascota)->where('especie','LIKE', $especie)->where('genero','LIKE', $generoMasc)->where('id_cliente','=', $id_Cliente2)->pluck('id_mascota');
-            $ID_Masc = $queryExtractID->first();
-            DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
+            $comprob = 'Verificar la informacion ingresada';
+            $msg = 'Algun campo se encuentra vacio';
+            $ID_Masc = "";
         }
-    }
-}else{
-    $comprob = 'Verificar la informacion ingresada';
-    $msg = 'Algun campo se encuentra vacio';
-}
 
         return json_encode(array(
             'status' => 200,
