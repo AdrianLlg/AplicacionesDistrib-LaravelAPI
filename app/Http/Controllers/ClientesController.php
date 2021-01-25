@@ -59,8 +59,12 @@ class ClientesController extends Controller
         $msg = 'Algun campo se encuentra vacio';
     }
 
+if($nomb_ape && $lat && $long && $n_mascota && $especie && $generoMasc && $CI != null){
     if($flag == 1){
       
+        $comprob = 'Informacion procesada correctamente';
+        $msg = 'Informacion recibida correctamente';
+        
         $clientID2= DB::table('clientes')->select('id_Cliente')->where('cedula','LIKE', $logClientCI)->pluck('id_Cliente');
         $id_Cliente2 = $clientID2->first();
 
@@ -80,6 +84,10 @@ class ClientesController extends Controller
             DB::table('clientes')->where('id_Cliente','=', $id_Cliente2)->update(['longitud' => $long, 'latitud' => $lat]);
         }
     }
+}else{
+    $comprob = 'Verificar la informacion ingresada';
+    $msg = 'Algun campo se encuentra vacio';
+}
 
         return json_encode(array(
             'status' => 200,
