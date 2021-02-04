@@ -108,7 +108,7 @@ class ClientesController extends Controller
     
             $info_Cliente = Clientes::findOrFail($ident_Cli);
     
-            $Info = "{$info_Mascota} {$info_Cliente}";
+            $Info = [ $info_Mascota,$info_Cliente];
 
             return $Info;
 
